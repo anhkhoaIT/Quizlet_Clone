@@ -1,0 +1,76 @@
+package com.example.cuoikiandroid.Phat;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.cuoikiandroid.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+
+public class topicItemAdapter extends RecyclerView.Adapter<topicItemAdapter.topicViewHolder> {
+    Context context;
+    ArrayList<topicItem> topic;
+    private int selectedPosition = RecyclerView.NO_POSITION;
+    public topicItemAdapter(Context context, ArrayList<topicItem> topic) {
+        this.context = context;
+        this.topic = topic;
+    }
+    public int getSelectedPosition() {
+        return selectedPosition;
+    }
+    public void setSelectedPosition(int position) {
+        this.selectedPosition = position;
+    }
+    @NonNull
+    @Override
+    public topicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new topicViewHolder(LayoutInflater.from(context).inflate(R.layout.topic_item,parent,
+                false));
+    }
+    @Override
+    public void onBindViewHolder(@NonNull topicViewHolder holder, int position) {
+        holder.topicName.setText(topic.get(position).getTopicName());
+        holder.wordAmount.setText(topic.get(position).getWordAmount());
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setSelectedPosition(holder.getAdapterPosition());
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return topic.size();
+    }
+
+    public class topicViewHolder extends RecyclerView.ViewHolder {
+        TextView topicName, wordAmount;
+        public topicViewHolder(@NonNull View itemView) {
+            super(itemView);
+            topicName = itemView.findViewById(R.id.topicName);
+            wordAmount = itemView.findViewById(R.id.wordAmount);
+
+
+        }
+
+    }
+
+}
