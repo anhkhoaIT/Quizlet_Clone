@@ -9,6 +9,9 @@ public class Topic implements Parcelable {
     private String topicName;
     private String wordAmount;
 
+    public Topic() {
+    }
+
     public Topic(String topicName, String wordAmount) {
         this.topicName = topicName;
         this.wordAmount = wordAmount;
