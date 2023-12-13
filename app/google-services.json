@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "775964711371",
+    "project_id": "quizlet-76da3",
+    "storage_bucket": "quizlet-76da3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775964711371:android:cd25977dbdebf25764be4e",
+        "android_client_info": {
+          "package_name": "com.example.cuoikiandroid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ0rWpZPfq2pWRW2oV5Fgn5cvEuBj8VzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775964711371:android:96703be25dc30a5764be4e",
+        "android_client_info": {
+          "package_name": "com.example.quizlet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ0rWpZPfq2pWRW2oV5Fgn5cvEuBj8VzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

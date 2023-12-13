@@ -13,9 +13,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:filterTouchesWhenObscured="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
 
         <EditText
             android:id="@+id/edtMail"
@@ -29,12 +28,24 @@
             app:layout_constraintStart_toStartOf="@+id/edtPass" />
 
         <EditText
+            android:id="@+id/registerPass"
+            android:layout_width="303dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:gravity="center"
+            android:hint="Password"
+            android:inputType="textPersonName"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/edtPass"
+            app:layout_constraintStart_toStartOf="@+id/edtPass" />
+
+        <EditText
             android:id="@+id/edtPass"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:gravity="center"
-            android:hint="Password"
+            android:hint="Confirm password"
             android:inputType="textPassword"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/btnRegister"
@@ -42,37 +53,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Login"
-            app:layout_constraintEnd_toStartOf="@+id/btnRegister"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtPass" />
-
-        <Button
             android:id="@+id/btnRegister"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:backgroundTint="#EEECEC"
             android:text="Register"
-            android:textColor="@color/purple_700"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnLogin"
             app:layout_constraintTop_toBottomOf="@+id/edtPass" />
 
-        <TextView
-            android:id="@+id/forgotPass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:filterTouchesWhenObscured="false"
-            android:text="Forgot password ?"
-            android:textAlignment="center"
-            android:textSize="16dp" />
+
 
     </LinearLayout>
 
