@@ -1,31 +1,21 @@
 package com.example.cuoikiandroid.Phat;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.cuoikiandroid.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class topicItemAdapter extends RecyclerView.Adapter<topicItemAdapter.topicViewHolder> {
+public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.topicViewHolder> {
     Context context;
-    ArrayList<topicItem> topic;
+    ArrayList<Topic> topic;
     private int selectedPosition = RecyclerView.NO_POSITION;
-    public topicItemAdapter(Context context, ArrayList<topicItem> topic) {
+    public TopicAdapter(Context context, ArrayList<Topic> topic) {
         this.context = context;
         this.topic = topic;
     }

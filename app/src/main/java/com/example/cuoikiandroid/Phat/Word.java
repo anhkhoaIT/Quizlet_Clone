@@ -1,10 +1,13 @@
 package com.example.cuoikiandroid.Phat;
 
-public class word {
+public class Word {
     private String backText;
     private String frontText;
 
-    public word(String backText, String frontText) {
+    public Word() {
+    }
+
+    public Word(String backText, String frontText) {
         this.backText = backText;
         this.frontText = frontText;
     }
@@ -24,4 +27,5 @@ public class word {
     public void setFrontText(String frontText) {
         this.frontText = frontText;
     }
+
 }
