@@ -17,22 +17,27 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.wordViewHolder
     Context context;
     ArrayList<Word> words;
     private int selectedPosition = RecyclerView.NO_POSITION;
+
     public WordAdapter(Context context, ArrayList<Word> Words) {
         this.context = context;
         this.words = Words;
     }
+
     public int getSelectedPosition() {
         return selectedPosition;
     }
+
     public void setSelectedPosition(int position) {
         this.selectedPosition = position;
     }
+
     @NonNull
     @Override
     public wordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new wordViewHolder(LayoutInflater.from(context).inflate(R.layout.add_word,parent,
                 false));
     }
+
     @Override
     public void onBindViewHolder(@NonNull wordViewHolder holder, int position) {
 
@@ -89,10 +94,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.wordViewHolder
             super(itemView);
             term = itemView.findViewById(R.id.term_add_word);
             definition = itemView.findViewById(R.id.definition_add_word);
-
-
         }
-
     }
 
     public void setWords(ArrayList<Word> words) {

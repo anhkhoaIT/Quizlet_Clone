@@ -36,7 +36,7 @@ public class EditTopicActivity extends AppCompatActivity {
     EditText term;
     EditText definition;
     FloatingActionButton btn_addWord_Topic;
-    ImageView confirm_add_topic;
+    ImageView save_btn;
     WordAdapter wadapter;
     ArrayList<Word> words;
     FirebaseFirestore db;
@@ -51,7 +51,7 @@ public class EditTopicActivity extends AppCompatActivity {
         rv = findViewById(R.id.recyclerView_editTopic);
         btn_addWord_Topic = findViewById(R.id.addWordForTopic_btn_editTopic);
         topicName = findViewById(R.id.topicName_editText_editTopic);
-        confirm_add_topic = findViewById(R.id.confirm_add_topic_editTopic);
+        save_btn = findViewById(R.id.confirm_add_topic_editTopic);
 
         words = new ArrayList<>();
 
@@ -75,21 +75,69 @@ public class EditTopicActivity extends AppCompatActivity {
             rv.scrollToPosition(words.size() - 1);
         });
 
-        confirm_add_topic.setOnClickListener(v -> {
-            String topicNameText = topicName.getText().toString();
+        save_btn.setOnClickListener(v -> {
+            String editTopicName = topicName.getText().toString();
 
-            if (topicNameText.isEmpty()) {
+            if (editTopicName.isEmpty()) {
                 topicName.setError("Vui lòng nhập tên chủ đề");
             }else {
-                comfirm_addTopic();
+                EditSelectedWord(editTopicName);
             }
-
         });
     }
 
+    public void EditSelectedWord(String editTopicName){
+        ArrayList<Map<String, Object>> wordsData = new ArrayList<>();
+        Topic newTopic = new Topic(editTopicName, String.valueOf(words.size()) + " từ");
+
+        // Duyệt qua từng item trong RecyclerView để lấy dữ liệu từ EditText
+        for(int i = 0; i < words.size(); i++){
+            Map<String, Object> wordTopic = new HashMap<>();
+            wordTopic.put("BackText", words.get(i).getBackText());
+            wordTopic.put("FrontText", words.get(i).getFrontText());
+            wordsData.add(wordTopic);
+        }
+
+        // Thêm dữ liệu vào Firestore
+        Map<String, Object> topicData = new HashMap<>();
+        topicData.put("topicName", newTopic.getTopicName());
+        topicData.put("wordAmount",newTopic.getWordAmount());
+        topicData.put("words", wordsData);
 
 
-    public void comfirm_addTopic(){
+        db.collection("topics")
+                .whereEqualTo("topicName",editTopicName)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                            String documentID = documentSnapshot.getId();
+
+                            db.collection("topics")
+                                    .document(documentID)
+                                    .update(topicData)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Intent editIntent = new Intent(EditTopicActivity.this, ListTopicActivity.class);
+                                            startActivity(editIntent);
+                                            Toast.makeText(EditTopicActivity.this,"Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(EditTopicActivity.this,"Chỉnh sửa thất bại", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
+                });
+    }
+
+    public void saveTopic(){
         // Tạo một ArrayList để lưu trữ dữ liệu từ RecyclerView
         ArrayList<Map<String, Object>> wordsData = new ArrayList<>();
 
@@ -148,59 +196,17 @@ public class EditTopicActivity extends AppCompatActivity {
                                     for (Map<String, String> word : wordList) {
                                         String frontText = word.get("FrontText");
                                         String backText = word.get("BackText");
-                                        words.add(new Word(backText, frontText)); //back trước front sau do trong Word.class bị z
+                                        words.add(new Word(backText, frontText)); //back trước front sau do trong 'Word.class' bị
                                     }
                                     wadapter.notifyDataSetChanged();
-
-                                    wadapter.setWords(words); // Add this method to your adapter
-
+                                    wadapter.setWords(words); // load word on Firestore to words array in adapter
                                     break;
                                 }
                             }
                         } else {
-                            Log.w("Firestore data", "Lỗi truy cập document chính", task.getException());
+                            Log.w("Firestore data", "Lỗi truy cập main document", task.getException());
                         }
                     }
                 });
     }
-
-//    public void EditSelectedWord(String id, String fullname, String email, String phone){
-//        db.collection("student")
-//                .whereEqualTo("id",id)
-//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-//                            String documentID = documentSnapshot.getId();
-//
-//                            Map<String, Object> editInfo = new HashMap<>();
-//                            editInfo.put("id",id);
-//                            editInfo.put("name", fullname);
-//                            editInfo.put("email", email);
-//                            editInfo.put("phone", phone);
-//
-//                            db.collection("student")
-//                                    .document(documentID)
-//                                    .update(editInfo)
-//                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                        @Override
-//                                        public void onSuccess(Void unused) {
-//                                            Intent editIntent = new Intent(InfoStudentActivity.this, MainActivity.class);
-//                                            startActivity(editIntent);
-//                                            Toast.makeText(InfoStudentActivity.this,"Chỉnh sửa thành công", Toast.LENGTH_SHORT).show();
-//                                            finish();
-//                                        }
-//                                    })
-//                                    .addOnFailureListener(new OnFailureListener() {
-//                                        @Override
-//                                        public void onFailure(@NonNull Exception e) {
-//                                            Toast.makeText(InfoStudentActivity.this,"Chỉnh sửa thất bại", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    });
-//
-//                        }
-//                    }
-//                });
-//    }
 }
