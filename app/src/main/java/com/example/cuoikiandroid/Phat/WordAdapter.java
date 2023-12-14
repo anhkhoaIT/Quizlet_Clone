@@ -35,6 +35,13 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.wordViewHolder
     }
     @Override
     public void onBindViewHolder(@NonNull wordViewHolder holder, int position) {
+
+        Word word = words.get(position);
+
+        // Set data to EditText fields in your ViewHolder
+        holder.term.setText(word.getFrontText());
+        holder.definition.setText(word.getBackText());
+
         holder.term.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -48,7 +55,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.wordViewHolder
 
             @Override
             public void afterTextChanged(Editable s) {
-                words.get(position).setFrontText(s.toString());
+                words.get(holder.getAdapterPosition()).setFrontText(s.toString());
             }
         });
 
@@ -65,7 +72,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.wordViewHolder
 
             @Override
             public void afterTextChanged(Editable s) {
-                words.get(position).setBackText(s.toString());
+                words.get(holder.getAdapterPosition()).setBackText(s.toString());
             }
         });
 
@@ -88,4 +95,8 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.wordViewHolder
 
     }
 
+    public void setWords(ArrayList<Word> words) {
+        this.words = words;
+        notifyDataSetChanged();
+    }
 }

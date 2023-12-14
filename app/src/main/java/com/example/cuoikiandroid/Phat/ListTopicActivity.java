@@ -29,6 +29,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ListTopicActivity extends AppCompatActivity {
 
@@ -132,8 +134,8 @@ public class ListTopicActivity extends AppCompatActivity {
 
 
             }
-            if(item.getItemId() == R.id.selected_about){
-
+            if(item.getItemId() == R.id.selected_edit){
+                EditSelectedTopic(position);
             }
         }
         return true;
@@ -175,5 +177,12 @@ public class ListTopicActivity extends AppCompatActivity {
         }
     }
 
+    public void EditSelectedTopic(int position) {
+        Intent intent = new Intent(ListTopicActivity.this, EditTopicActivity.class);
+        Topic t = topics.get(position);
+        String topicName = t.getTopicName();
+        intent.putExtra("EDITED_TOPIC", topicName);
+        startActivity(intent);
+    }
 
 }

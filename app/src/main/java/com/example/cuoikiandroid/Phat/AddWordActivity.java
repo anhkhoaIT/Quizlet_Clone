@@ -33,7 +33,6 @@ public class AddWordActivity extends AppCompatActivity {
     ImageView confirm_add_topic;
     WordAdapter wadapter;
     ArrayList<Word> words;
-
     FirebaseFirestore db;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,7 +85,7 @@ public class AddWordActivity extends AppCompatActivity {
         }
 
         String topicNameText = topicName.getText().toString();
-        Topic newTopic = new Topic(topicNameText, String.valueOf(words.size()));
+        Topic newTopic = new Topic(topicNameText, String.valueOf(words.size() + " từ"));
 
         // Thêm dữ liệu vào Firestore
         Map<String, Object> topicData = new HashMap<>();

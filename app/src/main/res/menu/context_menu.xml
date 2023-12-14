@@ -4,7 +4,7 @@
         android:title="Delete">
     </item>
 
-    <item android:id="@+id/selected_about"
-        android:title="About">
+    <item android:id="@+id/selected_edit"
+        android:title="Edit">
     </item>
 </menu>
