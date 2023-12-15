@@ -38,10 +38,9 @@ public class ListTopicActivity extends AppCompatActivity {
     FloatingActionButton btn_addTopic;
     TopicAdapter topicAdapter;
     ArrayList<Topic>  topics;
-
     FirebaseFirestore db;
-
     private static final int ADD_TOPIC_REQUEST = 111;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

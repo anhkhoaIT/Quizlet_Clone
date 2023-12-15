@@ -8,29 +8,33 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.cuoikiandroid.R;
-
 import java.util.ArrayList;
 
 public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.topicViewHolder> {
     Context context;
     ArrayList<Topic> topic;
     private int selectedPosition = RecyclerView.NO_POSITION;
+
     public TopicAdapter(Context context, ArrayList<Topic> topic) {
         this.context = context;
         this.topic = topic;
     }
+
     public int getSelectedPosition() {
         return selectedPosition;
     }
+
     public void setSelectedPosition(int position) {
         this.selectedPosition = position;
     }
+
     @NonNull
     @Override
     public topicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new topicViewHolder(LayoutInflater.from(context).inflate(R.layout.topic_item,parent,
                 false));
     }
+
     @Override
     public void onBindViewHolder(@NonNull topicViewHolder holder, int position) {
         holder.topicName.setText(topic.get(position).getTopicName());
@@ -43,7 +47,6 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.topicViewHol
                 return false;
             }
         });
-
     }
 
     @Override
@@ -57,10 +60,6 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.topicViewHol
             super(itemView);
             topicName = itemView.findViewById(R.id.topicName);
             wordAmount = itemView.findViewById(R.id.wordAmount);
-
-
         }
-
     }
-
 }
