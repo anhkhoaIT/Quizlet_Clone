@@ -67,6 +67,7 @@ public class ListTopicActivity extends AppCompatActivity {
         });
 
         registerForContextMenu(rv);
+
         rv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

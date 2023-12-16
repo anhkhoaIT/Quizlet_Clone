@@ -1,6 +1,7 @@
 package com.example.cuoikiandroid.Phat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,18 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
             public boolean onLongClick(View v) {
                 setSelectedPosition(holder.getAdapterPosition());
                 return false;
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Folder selectedFolder = folders.get(holder.getAdapterPosition());
+                String folderName = selectedFolder.getFolderName();
+
+                Intent intent = new Intent(context, ListTopicInFolderAcitvity.class);
+                intent.putExtra("FOLDER_NAME", folderName);
+                context.startActivity(intent);
             }
         });
     }

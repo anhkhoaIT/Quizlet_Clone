@@ -48,10 +48,10 @@ public class EditTopicActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        rv = findViewById(R.id.recyclerView_editTopic);
+        rv = findViewById(R.id.recyclerView_listTopicInFolder);
         btn_addWord_Topic = findViewById(R.id.addWordForTopic_btn_editTopic);
         topicName = findViewById(R.id.topicName_editText_editTopic);
-        save_btn = findViewById(R.id.confirm_add_topic_editTopic);
+        save_btn = findViewById(R.id.edit_button_listTopicInFolder);
 
         words = new ArrayList<>();
 

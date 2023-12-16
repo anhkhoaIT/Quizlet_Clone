@@ -27,12 +27,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.internal.EdgeToEdgeUtils;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ListFolderActivity extends AppCompatActivity {
     RecyclerView rv;
@@ -78,10 +81,28 @@ public class ListFolderActivity extends AppCompatActivity {
                 okbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String temp = diaglogFolderName.getText().toString();
-                        // Assuming folderName is a TextView in your activity
-                        folderName.setText(temp);
+                        Folder newFolder = new Folder(diaglogFolderName.getText().toString());
+                        folders.add(newFolder);
+                        folderAdapter.notifyDataSetChanged();
                         createFolderDiaglog.cancel();
+
+                        Map<String, Object> folderData = new HashMap<>();
+                        folderData.put("folderName", newFolder.getFolderName());
+
+                        db.collection("folders")
+                                .add(folderData)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Toast.makeText(ListFolderActivity.this,"Tạo thư mục thành công", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(ListFolderActivity.this,"Tạo thư mục thất bại", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
                 });
 
@@ -95,13 +116,14 @@ public class ListFolderActivity extends AppCompatActivity {
             }
         });
 
-//        registerForContextMenu(rv);
-//        rv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//            @Override
-//            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//                getMenuInflater().inflate(R.menu.context_menu,menu);
-//            }
-//        });
+        registerForContextMenu(rv);
+
+        rv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                getMenuInflater().inflate(R.menu.context_menu,menu);
+            }
+        });
     }
 
 //    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -136,80 +158,80 @@ public class ListFolderActivity extends AppCompatActivity {
                 });
     }
 
-//    // Click option on context menu listener:
-//    @Override
-//    public boolean onContextItemSelected(@NonNull MenuItem item) {
-//        int position = topicAdapter.getSelectedPosition();
-//        if(position != RecyclerView.NO_POSITION){
-//            if(item.getItemId() == R.id.selected_delete){
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                builder.setMessage("Do you want to delete this topic ?");
-//                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        DeleteSelectedTopic(position);
-//                    }
-//                });
-//                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    }
-//                });
-//
-//                AlertDialog alertDialog = builder.create();
-//                alertDialog.show();
-//
-//
-//            }
-//            if(item.getItemId() == R.id.selected_edit){
-//                EditSelectedTopic(position);
-//            }
-//        }
-//        return true;
-//    }
-//
-//    public void DeleteSelectedTopic(int position) {
-//        if(position != - 1){
-//            Topic t = topics.get(position);
-//            String topicID = t.getTopicName();
-//
-//            db.collection("topics")
-//                    .whereEqualTo("topicName",topicID)
-//                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                            if(task.isSuccessful()){
-//                                DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-//                                String documentID = documentSnapshot.getId();
-//                                db.collection("topics")
-//                                        .document(documentID)
-//                                        .delete()
-//                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                            @Override
-//                                            public void onSuccess(Void unused) {
-//                                                topics.remove(position);
-//                                                topicAdapter.notifyItemRemoved(position);
-//                                                Toast.makeText(ListTopicActivity.this, "Xóa chủ đề thành công",Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        })
-//                                        .addOnFailureListener(new OnFailureListener() {
-//                                            @Override
-//                                            public void onFailure(@NonNull Exception e) {
-//                                                Toast.makeText(ListTopicActivity.this, "Xóa chủ đề thất bại",Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        });
-//                            }
-//                        }
-//                    });
-//        }
-//    }
-//
-//    public void EditSelectedTopic(int position) {
+    // Click option on context menu listener:
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int position = folderAdapter.getSelectedPosition();
+        if(position != RecyclerView.NO_POSITION){
+            if(item.getItemId() == R.id.selected_delete){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Do you want to delete this folder?");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        DeleteSelectedTopic(position);
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+
+            }
+            if(item.getItemId() == R.id.selected_edit){
+                EditSelectedTopic(position);
+            }
+        }
+        return true;
+    }
+
+    public void DeleteSelectedTopic(int position) {
+        if(position != - 1){
+            Folder f = folders.get(position);
+            String folderID = f.getFolderName();
+
+            db.collection("folders")
+                    .whereEqualTo("folderName",folderID)
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()){
+                                DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                                String documentID = documentSnapshot.getId();
+                                db.collection("folders")
+                                        .document(documentID)
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                folders.remove(position);
+                                                folderAdapter.notifyItemRemoved(position);
+                                                Toast.makeText(ListFolderActivity.this, "Xóa thư mục thành công",Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(ListFolderActivity.this, "Xóa thư mục thất bại",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        }
+                    });
+        }
+    }
+
+    public void EditSelectedTopic(int position) {
 //        Intent intent = new Intent(ListTopicActivity.this, EditTopicActivity.class);
 //        Topic t = topics.get(position);
 //        String topicName = t.getTopicName();
 //        intent.putExtra("EDITED_TOPIC", topicName);
 //        startActivity(intent);
-//    }
+    }
 }

@@ -7,19 +7,16 @@ import androidx.annotation.NonNull;
 
 public class Folder implements Parcelable {
     private String folderName;
-    private String topicAmount;
 
     public Folder() {
     }
 
-    public Folder(String folderName, String topicAmount) {
+    public Folder(String folderName) {
         this.folderName = folderName;
-        this.topicAmount = topicAmount;
     }
 
     protected Folder(Parcel in) {
         folderName = in.readString();
-        topicAmount = in.readString();
     }
 
     public static final Creator<Folder> CREATOR = new Creator<Folder>() {
@@ -42,14 +39,6 @@ public class Folder implements Parcelable {
         this.folderName = folderName;
     }
 
-    public String getTopicAmount() {
-        return topicAmount;
-    }
-
-    public void setTopicAmount(String topicAmount) {
-        this.topicAmount = topicAmount;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -58,6 +47,5 @@ public class Folder implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(folderName);
-        dest.writeString(topicAmount);
     }
 }

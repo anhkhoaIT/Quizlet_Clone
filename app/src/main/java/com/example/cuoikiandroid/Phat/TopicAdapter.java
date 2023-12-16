@@ -20,14 +20,6 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.topicViewHol
         this.topic = topic;
     }
 
-    public int getSelectedPosition() {
-        return selectedPosition;
-    }
-
-    public void setSelectedPosition(int position) {
-        this.selectedPosition = position;
-    }
-
     @NonNull
     @Override
     public topicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,6 +44,14 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.topicViewHol
     @Override
     public int getItemCount() {
         return topic.size();
+    }
+
+    public int getSelectedPosition() {
+        return selectedPosition;
+    }
+
+    public void setSelectedPosition(int position) {
+        this.selectedPosition = position;
     }
 
     public class topicViewHolder extends RecyclerView.ViewHolder {
