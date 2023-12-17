@@ -1,4 +1,4 @@
-package com.example.cuoikiandroid.ui.slideshow;
+package com.example.cuoikiandroid.ui.topic;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.cuoikiandroid.databinding.FragmentSlideshowBinding;
+import com.example.cuoikiandroid.databinding.FragmentHomeBinding;
 
-public class SlideshowFragment extends Fragment {
+public class TopicFragment extends Fragment {
 
-    private FragmentSlideshowBinding binding;
+    private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        SlideshowViewModel slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+        TopicViewModel topicViewModel =
+                new ViewModelProvider(this).get(TopicViewModel.class);
 
-        binding = FragmentSlideshowBinding.inflate(inflater, container, false);
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSlideshow;
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textHome;
+        topicViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

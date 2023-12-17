@@ -74,6 +74,9 @@ public class ListTopicActivity extends AppCompatActivity {
                 getMenuInflater().inflate(R.menu.context_menu,menu);
             }
         });
+
+        //
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

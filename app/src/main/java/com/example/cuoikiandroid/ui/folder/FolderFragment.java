@@ -1,4 +1,4 @@
-package com.example.cuoikiandroid.ui.gallery;
+package com.example.cuoikiandroid.ui.folder;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.cuoikiandroid.databinding.FragmentGalleryBinding;
 
-public class GalleryFragment extends Fragment {
+public class FolderFragment extends Fragment {
 
     private FragmentGalleryBinding binding;
 

@@ -71,6 +71,8 @@ public class ProfileActivity extends AppCompatActivity {
         //Khoi tao storage va storageReference
         storage = FirebaseStorage.getInstance();
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
 
 
