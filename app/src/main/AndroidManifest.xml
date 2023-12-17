@@ -13,7 +13,7 @@
         android:theme="@style/Theme.CuoiKiAndroid"
         tools:targetApi="31">
         <activity
-            android:name=".Phat.ListFolderActivity"
+            android:name=".Phat.ListTopicActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.CuoiKiAndroid.NoActionBar">
@@ -23,12 +23,47 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".Phat.AddWordActivity"
             android:exported="false">
         </activity>
 
         <activity android:name=".Phat.EditTopicActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".Phat.ListTopicInFolderAcitvity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".Hung.FlashcardActivity"
+            android:exported="false"
+            android:parentActivityName=".Phat.ListTopicActivity">
+        </activity>
+
+        <activity android:name=".Hung.StartQuizActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".Hung.QuizActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".Hung.QuizScoreActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".Hung.StartTypeActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".Hung.TypeActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".Hung.TypeScoreActivity"
             android:exported="false">
         </activity>
 

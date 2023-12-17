@@ -1,6 +1,7 @@
 package com.example.cuoikiandroid.Phat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.cuoikiandroid.R;
 import java.util.ArrayList;
+import com.example.cuoikiandroid.Hung.FlashcardActivity;
 
 public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.topicViewHolder> {
     Context context;
@@ -37,6 +39,18 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.topicViewHol
             public boolean onLongClick(View v) {
                 setSelectedPosition(holder.getAdapterPosition());
                 return false;
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Topic selectedTopic = topic.get(holder.getAdapterPosition());
+                String topicName = selectedTopic.getTopicName();
+
+                Intent intent = new Intent(context, FlashcardActivity.class);
+                intent.putExtra("topicName", topicName);
+                context.startActivity(intent);
             }
         });
     }

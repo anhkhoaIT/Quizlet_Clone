@@ -2,7 +2,6 @@ package com.example.cuoikiandroid.Phat;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -26,7 +25,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.internal.EdgeToEdgeUtils;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -74,7 +72,7 @@ public class ListFolderActivity extends AppCompatActivity {
                 createFolderDiaglog.setCancelable(false);
 
                 // Use createFolderDiaglog.findViewById here
-                EditText diaglogFolderName = createFolderDiaglog.findViewById(R.id.editTextFolderName);
+                EditText diaglogFolderName = createFolderDiaglog.findViewById(R.id.editTextExistsTopicName);
                 Button okbtn = createFolderDiaglog.findViewById(R.id.buttonOK);
                 Button cancelBtn = createFolderDiaglog.findViewById(R.id.buttonCancel);
 

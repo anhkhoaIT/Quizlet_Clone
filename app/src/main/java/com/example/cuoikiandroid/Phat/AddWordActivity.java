@@ -68,7 +68,6 @@ public class AddWordActivity extends AppCompatActivity {
             }else {
                 comfirm_addTopic();
             }
-
         });
     }
 

@@ -1,20 +1,17 @@
 package com.example.cuoikiandroid.Phat;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,39 +23,44 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ListTopicInFolderAcitvity extends AppCompatActivity {
+public class EditFolderActivity extends AppCompatActivity {
 
     RecyclerView rv;
     TopicAdapter topicAdapter;
     ArrayList<Topic> topics;
+    List<String> availableTopics;
     EditText folderName;
-    ImageView editButton;
+    ImageView saveButton;
+    FloatingActionButton addButton;
     FirebaseFirestore db;
     private static final int ADD_TOPIC_REQUEST = 111;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_topic_in_folder);
+        setContentView(R.layout.activity_edit_folder);
 
         db = FirebaseFirestore.getInstance();
 
-        rv = findViewById(R.id.recyclerView_listTopicInFolder);
-        folderName = findViewById(R.id.folderName_editText_listTopicInFolder);
-        editButton = findViewById(R.id.edit_button_listTopicInFolder);
+        rv = findViewById(R.id.editedTopic_recyclerView);
+        folderName = findViewById(R.id.folderName_editText);
+        saveButton = findViewById(R.id.save_btn);
+        addButton = findViewById(R.id.addFolder_btn);
 
         topics = new ArrayList<>();
+        availableTopics = new ArrayList<>();
 
         topicAdapter = new TopicAdapter(this,topics);
         rv.setAdapter(topicAdapter);
@@ -66,20 +68,79 @@ public class ListTopicInFolderAcitvity extends AppCompatActivity {
         LinearLayoutManager linearLayout = new LinearLayoutManager(this);
         rv.setLayoutManager(linearLayout);
 
-        folderName.setEnabled(false);
+//        folderName.setEnabled(false);
         String editedFolerName = getIntent().getStringExtra("FOLDER_NAME");
         folderName.setText(editedFolerName);
 
         loadTopicInFolder();
 
-        editButton.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ListTopicInFolderAcitvity.this, EditFolderActivity.class);
-                intent.putExtra("FOLDER_NAME", folderName.getText());
-                startActivity(intent);
+//                topics.add(new Topic());
+//                topicAdapter.notifyItemInserted(topics.size() - 1);
+//                rv.scrollToPosition(topics.size() - 1);
+
+                Dialog dialog = new Dialog(EditFolderActivity.this);
+                dialog.setContentView(R.layout.diaglog_add_exists_topic);
+                dialog.setCancelable(false);
+
+                // Use createFolderDiaglog.findViewById here
+                EditText inputExistTopicName = dialog.findViewById(R.id.editTextExistsTopicName);
+                Button okbtn = dialog.findViewById(R.id.buttonOK);
+                Button cancelBtn = dialog.findViewById(R.id.buttonCancel);
+
+                okbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+//                        Map<String, Object> folderData = new HashMap<>();
+//                        folderData.put("folderName", newFolder.getFolderName());
+//
+//                        db.collection("folders")
+//                                .add(folderData)
+//                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                                    @Override
+//                                    public void onSuccess(DocumentReference documentReference) {
+//                                        Toast.makeText(ListFolderActivity.this,"Tạo thư mục thành công", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                })
+//                                .addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                        Toast.makeText(ListFolderActivity.this,"Tạo thư mục thất bại", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                });
+//
+//                        Folder newFolder = new Folder(diaglogFolderName.getText().toString());
+//                        folders.add(newFolder);
+//                        folderAdapter.notifyDataSetChanged();
+
+                    }
+                });
+
+                cancelBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+                dialog.show();
             }
         });
+
+//        saveButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String topicNameText = topicName.getText().toString();
+//
+//                if (topicNameText.isEmpty()) {
+//                    topicName.setError("Vui lòng nhập tên chủ đề");
+//                }else {
+//                    comfirm_addTopic();
+//                }
+//            }
+//        });
 //        registerForContextMenu(rv);
 
 //        rv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -100,6 +161,28 @@ public class ListTopicInFolderAcitvity extends AppCompatActivity {
                 topicAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    public void loadAvailableTopic(){
+        db.collection("topics")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot maindoc : task.getResult()) {
+                                List<String> words = (List<String>) maindoc.get("topicName");
+                                for (String word : words) {
+                                    availableTopics.add(word.toString());
+                                }
+                                break;
+                            }
+                        }
+                        else {
+                            Log.w("Fire store data", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 
     public void loadTopicInFolder(){
@@ -225,7 +308,7 @@ public class ListTopicInFolderAcitvity extends AppCompatActivity {
 //                    });
 //        }
 //    }
-//
+
 //    public void EditSelectedTopic(int position) {
 //        Intent intent = new Intent(ListTopicActivity.this, EditTopicActivity.class);
 //        Topic t = topics.get(position);
