@@ -39,7 +39,7 @@ public class EditFolderActivity extends AppCompatActivity {
     RecyclerView rv;
     TopicAdapter topicAdapter;
     ArrayList<Topic> topics;
-    List<String> availableTopics;
+    List<Topic> availableTopics;
     EditText folderName;
     ImageView saveButton;
     FloatingActionButton addButton;
@@ -79,10 +79,6 @@ public class EditFolderActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                topics.add(new Topic());
-//                topicAdapter.notifyItemInserted(topics.size() - 1);
-//                rv.scrollToPosition(topics.size() - 1);
-
                 Dialog dialog = new Dialog(EditFolderActivity.this);
                 dialog.setContentView(R.layout.diaglog_add_exists_topic);
                 dialog.setCancelable(false);
@@ -95,9 +91,28 @@ public class EditFolderActivity extends AppCompatActivity {
                 okbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        loadAvailableTopic();
+                        boolean found = false;
 
+                        for (Topic i : availableTopics) {
+                            if (inputExistTopicName.getText().toString().equals(i.getTopicName())) {
+                                topics.add(new Topic(i.getTopicName(), i.getWordAmount()));
+                                topicAdapter.notifyItemInserted(topics.size() - 1);
+                                rv.scrollToPosition(topics.size() - 1);
+                                Toast.makeText(EditFolderActivity.this, "Thêm học phần thành công", Toast.LENGTH_SHORT).show();
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (!found) {
+                            Toast.makeText(EditFolderActivity.this, "Không tìm thấy học phần", Toast.LENGTH_SHORT).show();
+                        }
+
+                        dialog.cancel();
                     }
                 });
+
 
                 cancelBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -121,6 +136,7 @@ public class EditFolderActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+
         registerForContextMenu(rv);
 
         rv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -149,21 +165,15 @@ public class EditFolderActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
+                        if(task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Lấy giá trị của trường "topicName"
-                                String topicName = document.getString("topicName");
-
-                                // Kiểm tra xem trường có giá trị không và thêm vào mảng
-                                if (topicName != null) {
-                                    availableTopics.add(topicName);
-                                }
+                                Log.d("Fire store data", document.getId() + " => " + document.getData());
+                                availableTopics.add(document.toObject(Topic.class));
                             }
-
-                            // Ở đây, bạn có thể thực hiện các công việc khác sau khi lấy được dữ liệu
-
-                        } else {
-                            Log.w("Firestore data", "Error getting documents.", task.getException());
+//                            topicAdapter.notifyDataSetChanged();
+                        }
+                        else {
+                            Log.w("Fire store data", "Error getting documents.", task.getException());
                         }
                     }
                 });
