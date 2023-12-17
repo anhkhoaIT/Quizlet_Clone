@@ -116,7 +116,7 @@ public class ListTopicInFolderAcitvity extends AppCompatActivity {
                             for (QueryDocumentSnapshot maindoc : task.getResult()) {
                                 List<String> words = (List<String>) maindoc.get("topics");
                                 for (String word : words) {
-                                    arrayListTopicInFolder.add(word.toString());
+                                    arrayListTopicInFolder.add(word);
                                 }
                                 // Perform search and update topics
                                 searchAndLoadTopics(arrayListTopicInFolder);

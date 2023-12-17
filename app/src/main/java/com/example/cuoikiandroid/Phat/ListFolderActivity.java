@@ -33,6 +33,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ListFolderActivity extends AppCompatActivity {
@@ -86,7 +87,10 @@ public class ListFolderActivity extends AppCompatActivity {
                         createFolderDiaglog.cancel();
 
                         Map<String, Object> folderData = new HashMap<>();
+                        List<String> dataArray = new ArrayList<>() ;
+
                         folderData.put("folderName", newFolder.getFolderName());
+                        folderData.put("topics", dataArray);
 
                         db.collection("folders")
                                 .add(folderData)
