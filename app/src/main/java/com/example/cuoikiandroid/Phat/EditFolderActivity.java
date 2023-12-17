@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,7 +56,7 @@ public class EditFolderActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         rv = findViewById(R.id.editedTopic_recyclerView);
-        folderName = findViewById(R.id.folderName_editText);
+        folderName = findViewById(R.id.editedFolderName_editText);
         saveButton = findViewById(R.id.save_btn);
         addButton = findViewById(R.id.addFolder_btn);
 
@@ -68,11 +69,12 @@ public class EditFolderActivity extends AppCompatActivity {
         LinearLayoutManager linearLayout = new LinearLayoutManager(this);
         rv.setLayoutManager(linearLayout);
 
-//        folderName.setEnabled(false);
-        String editedFolerName = getIntent().getStringExtra("FOLDER_NAME");
+        //get Intent
+        String editedFolerName = getIntent().getStringExtra("FOLDER_NAME2");
+        ArrayList<Topic> receivedTopics = getIntent().getParcelableArrayListExtra("TOPICS");
         folderName.setText(editedFolerName);
-
-        loadTopicInFolder();
+        topics.addAll(receivedTopics);
+        topicAdapter.notifyDataSetChanged();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,28 +95,6 @@ public class EditFolderActivity extends AppCompatActivity {
                 okbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-//                        Map<String, Object> folderData = new HashMap<>();
-//                        folderData.put("folderName", newFolder.getFolderName());
-//
-//                        db.collection("folders")
-//                                .add(folderData)
-//                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                    @Override
-//                                    public void onSuccess(DocumentReference documentReference) {
-//                                        Toast.makeText(ListFolderActivity.this,"Tạo thư mục thành công", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                })
-//                                .addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {
-//                                        Toast.makeText(ListFolderActivity.this,"Tạo thư mục thất bại", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                });
-//
-//                        Folder newFolder = new Folder(diaglogFolderName.getText().toString());
-//                        folders.add(newFolder);
-//                        folderAdapter.notifyDataSetChanged();
 
                     }
                 });
@@ -141,14 +121,14 @@ public class EditFolderActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
-//        registerForContextMenu(rv);
+        registerForContextMenu(rv);
 
-//        rv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//            @Override
-//            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//                getMenuInflater().inflate(R.menu.context_menu,menu);
-//            }
-//        });
+        rv.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                getMenuInflater().inflate(R.menu.context_menu,menu);
+            }
+        });
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -163,27 +143,32 @@ public class EditFolderActivity extends AppCompatActivity {
         }
     }
 
-    public void loadAvailableTopic(){
+    public void loadAvailableTopic() {
         db.collection("topics")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot maindoc : task.getResult()) {
-                                List<String> words = (List<String>) maindoc.get("topicName");
-                                for (String word : words) {
-                                    availableTopics.add(word.toString());
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Lấy giá trị của trường "topicName"
+                                String topicName = document.getString("topicName");
+
+                                // Kiểm tra xem trường có giá trị không và thêm vào mảng
+                                if (topicName != null) {
+                                    availableTopics.add(topicName);
                                 }
-                                break;
                             }
-                        }
-                        else {
-                            Log.w("Fire store data", "Error getting documents.", task.getException());
+
+                            // Ở đây, bạn có thể thực hiện các công việc khác sau khi lấy được dữ liệu
+
+                        } else {
+                            Log.w("Firestore data", "Error getting documents.", task.getException());
                         }
                     }
                 });
     }
+
 
     public void loadTopicInFolder(){
         String editedFolerName = getIntent().getStringExtra("FOLDER_NAME");
@@ -197,13 +182,10 @@ public class EditFolderActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot maindoc : task.getResult()) {
 //                                    topics.clear();
-
                                 List<String> words = (List<String>) maindoc.get("topics");
-
                                 for (String word : words) {
                                     arrayListTopicInFolder.add(word.toString());
                                 }
-
                                 // Perform search and update topics
                                 searchAndLoadTopics(arrayListTopicInFolder);
                                 break;

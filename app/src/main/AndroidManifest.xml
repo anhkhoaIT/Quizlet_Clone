@@ -13,7 +13,7 @@
         android:theme="@style/Theme.CuoiKiAndroid"
         tools:targetApi="31">
         <activity
-            android:name=".Phat.ListTopicActivity"
+            android:name=".Phat.ListFolderActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.CuoiKiAndroid.NoActionBar">
@@ -64,6 +64,10 @@
         </activity>
 
         <activity android:name=".Hung.TypeScoreActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".Phat.EditFolderActivity"
             android:exported="false">
         </activity>
 

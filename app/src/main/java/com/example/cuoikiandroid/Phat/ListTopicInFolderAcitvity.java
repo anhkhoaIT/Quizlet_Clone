@@ -76,7 +76,8 @@ public class ListTopicInFolderAcitvity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ListTopicInFolderAcitvity.this, EditFolderActivity.class);
-                intent.putExtra("FOLDER_NAME", folderName.getText());
+                intent.putExtra("FOLDER_NAME2", folderName.getText().toString());
+                intent.putParcelableArrayListExtra("TOPICS", topics);
                 startActivity(intent);
             }
         });
@@ -113,14 +114,10 @@ public class ListTopicInFolderAcitvity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot maindoc : task.getResult()) {
-//                                    topics.clear();
-
                                 List<String> words = (List<String>) maindoc.get("topics");
-
                                 for (String word : words) {
                                     arrayListTopicInFolder.add(word.toString());
                                 }
-
                                 // Perform search and update topics
                                 searchAndLoadTopics(arrayListTopicInFolder);
                                 break;
